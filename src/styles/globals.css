@@ -140,11 +140,10 @@ p { line-height: 1.55; }
 .sort-button { display: inline-flex; align-items: center; gap: 5px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
 .sort-button:hover { color: var(--foreground); }
 .actions-column { width: 70px; text-align: right !important; }
-.row-actions { position: relative; display: inline-block; }
-.row-actions summary { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 6px; list-style: none; color: var(--muted-foreground); cursor: pointer; }
-.row-actions summary::-webkit-details-marker { display: none; }
-.row-actions summary:hover { background: var(--muted); color: var(--foreground); }
-.row-actions-menu { position: absolute; z-index: 5; top: 34px; right: 0; width: 140px; padding: 5px; border: 1px solid var(--border); border-radius: 8px; background: var(--popover); box-shadow: var(--shadow-overlay); }
+.row-actions-trigger { display: inline-grid; width: 30px; height: 30px; place-items: center; border: 0; border-radius: 6px; background: transparent; color: var(--muted-foreground); cursor: pointer; }
+.row-actions-trigger:hover, .row-actions-trigger[aria-expanded="true"] { background: var(--muted); color: var(--foreground); }
+.row-actions-menu { width: 140px; padding: 5px; border: 1px solid var(--border); border-radius: 8px; background: var(--popover); box-shadow: var(--shadow-overlay); }
+.row-actions-menu-floating { position: fixed; z-index: 60; }
 .row-actions-menu button { display: block; width: 100%; padding: 8px; border: 0; border-radius: 5px; background: transparent; color: var(--foreground); text-align: left; font-size: 0.8125rem; cursor: pointer; }
 .row-actions-menu button:hover { background: var(--muted); }
 .department-pagination { display: flex; align-items: center; gap: 16px; margin-top: 18px; color: var(--muted-foreground); font-size: 0.75rem; }
