@@ -10,6 +10,9 @@ import { LoginPage } from '../features/auth/pages/LoginPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 import { RegisterCompanyPage } from '../features/auth/pages/RegisterCompanyPage'
 import { UnauthorizedPage } from '../pages/UnauthorizedPage'
+import { EmployeesPage } from '../features/employees/pages/EmployeesPage'
+import { AddEmployeePage, UpdateEmployeePage } from '../features/employees/pages/EmployeeFormPages'
+import { EmployeeDetailsPage } from '../features/employees/pages/EmployeeDetailsPage'
 
 export function AppRouter() {
   return (
@@ -24,7 +27,10 @@ export function AppRouter() {
         <Route element={<AppShell />}>
         <Route path="/dashboard" element={<DashboardPlaceholderPage />} />
          <Route path="/departments" element={<DepartmentsPage />} />
-        <Route path="/employees" element={<FeaturePlaceholderPage title="Employees" />} />
+         <Route path="/employees" element={<EmployeesPage />} />
+         <Route path="/employees/new" element={<AddEmployeePage />} />
+         <Route path="/employees/:employeeId" element={<EmployeeDetailsPage />} />
+         <Route path="/employees/:employeeId/edit" element={<UpdateEmployeePage />} />
         <Route path="/leave" element={<FeaturePlaceholderPage title="Leave" />} />
         <Route path="/overtime" element={<FeaturePlaceholderPage title="Overtime" />} />
         <Route path="/attendance" element={<FeaturePlaceholderPage title="Attendance" />} />

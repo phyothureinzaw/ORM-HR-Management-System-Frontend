@@ -10,7 +10,8 @@ type SidebarProps = { onNavigate?: () => void }
 
 export function Sidebar({ onNavigate }: SidebarProps) {
   const canViewDepartments = usePermission(Permissions.Departments.View)
-  const visibleItems = navigationItems.filter((item) => item.label !== 'Departments' || canViewDepartments)
+  const canViewEmployees = usePermission(Permissions.Employees.View)
+  const visibleItems = navigationItems.filter((item) => (item.label !== 'Departments' || canViewDepartments) && (item.label !== 'Employees' || canViewEmployees))
   return (
     <aside className="sidebar" aria-label="Main navigation">
       <div className="brand-lockup">
