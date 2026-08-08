@@ -13,6 +13,18 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    proxy: {
+      '/api': {
+        target: 'https://localhost:7193',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/health': {
+        target: 'https://localhost:7193',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   test: {
     environment: 'jsdom',

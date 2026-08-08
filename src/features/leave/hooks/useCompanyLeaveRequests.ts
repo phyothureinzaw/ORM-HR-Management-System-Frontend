@@ -1,0 +1,2 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query'; import { getCompanyLeaveRequests } from '../api/leaveRequestApi'; import { leaveKeys } from '../api/leaveKeys'; import type { LeaveRequestFilters } from '../types/leaveRequest.types'
+export function useCompanyLeaveRequests(filters: LeaveRequestFilters) { return useQuery({ queryKey: leaveKeys.companyRequests(filters), queryFn: ({ signal }) => getCompanyLeaveRequests(filters, signal), placeholderData: keepPreviousData }) }

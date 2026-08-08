@@ -1,10 +1,12 @@
 import { http, HttpResponse } from 'msw'
+import userEvent from '@testing-library/user-event'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { App } from '../app/App'
 import { getApiBaseUrl } from '../lib/env'
 import { BackendStatus } from '../components/feedback/BackendStatus'
 import { server } from './server'
 import { renderWithProviders } from './testUtils'
+import { markAuthSessionActive } from '../features/auth/session/authSession'
 
 describe('Customer Web foundation', () => {
   it('renders the home page and provider-backed health status', async () => {
@@ -12,6 +14,20 @@ describe('Customer Web foundation', () => {
 
     expect(await screen.findByRole('heading', { name: /organize your workforce/i })).toBeInTheDocument()
     expect(await screen.findByText('Backend connected')).toBeInTheDocument()
+  })
+
+  it('requires login before opening workspace actions without a refresh session', async () => {
+    const client = userEvent.setup()
+    renderWithProviders(<App />)
+
+    await screen.findByRole('heading', { name: /organize your workforce/i })
+    await client.click(screen.getByRole('link', { name: /view workspace preview/i }))
+    expect(await screen.findByRole('heading', { name: 'Sign in to your workspace' })).toBeInTheDocument()
+
+    await client.click(screen.getByRole('link', { name: /back to foundation/i }))
+    await screen.findByRole('heading', { name: /organize your workforce/i })
+    await client.click(screen.getByRole('link', { name: /open sign-in placeholder/i }))
+    expect(await screen.findByRole('heading', { name: 'Sign in to your workspace' })).toBeInTheDocument()
   })
 
   it('shows health loading and unavailable states, then retries successfully', async () => {
@@ -42,6 +58,7 @@ describe('Customer Web foundation', () => {
       http.post('http://localhost:5278/api/auth/refresh-token', () => HttpResponse.json({ accessToken: 'shell-token', accessTokenExpiresAtUtc: '2030-01-01T00:00:00Z' })),
       http.get('http://localhost:5278/api/auth/me', () => HttpResponse.json({ userId: 'user-1', companyId: 'company-1', companyName: 'Northstar', companyAbbreviation: 'NORTHSTAR', userName: 'admin', email: 'admin@example.com', firstName: 'Ada', lastName: 'Admin', fullName: 'Ada Admin', roles: ['Company Admin'], permissions: ['departments.view'] })),
     )
+    markAuthSessionActive()
     renderWithProviders(<App />, '/dashboard')
 
     expect(await screen.findByRole('heading', { name: /good to see you/i })).toBeInTheDocument()

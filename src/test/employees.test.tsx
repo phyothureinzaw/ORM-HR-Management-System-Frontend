@@ -9,7 +9,7 @@ import { server } from './server'
 import { renderWithProviders } from './testUtils'
 
 const employee = { id: 'employee-1', employeeCode: 'EMP-001', firstName: 'Alex', lastName: 'Morgan', fullName: 'Alex Morgan', workEmail: 'alex@example.test', phoneNumber: null, jobTitle: 'Analyst', employmentDate: '2026-01-01', terminationDate: null, employmentStatus: 1, isActive: true, hasLoginAccount: false, department: { id: 'department-1', code: 'OPS', name: 'Operations' }, manager: null, loginAccount: { hasLoginAccount: false, userId: null, userName: null, email: null, isActive: null, roles: [], lastLoginAtUtc: null }, roles: [], createdAtUtc: '2026-01-01T00:00:00Z', updatedAtUtc: null }
-const options = { departments: [{ id: 'department-1', code: 'OPS', name: 'Operations' }], managers: [], roles: [{ id: 'role-1', name: 'Employee', normalizedName: 'EMPLOYEE' }], employmentStatuses: [{ value: 1, name: 'Active' }, { value: 2, name: 'OnLeave' }, { value: 3, name: 'Terminated' }] }
+const options = { departments: [{ id: 'department-1', code: 'OPS', name: 'Operations' }], managers: [{ id: 'manager-1', employeeCode: 'MGR-001', fullName: 'Morgan Manager', jobTitle: 'Manager' }], roles: [{ id: 'role-1', name: 'Employee', normalizedName: 'EMPLOYEE' }], employmentStatuses: [{ value: 1, name: 'Active' }, { value: 2, name: 'OnLeave' }, { value: 3, name: 'Terminated' }] }
 const page = { items: [employee], page: 1, pageSize: 10, totalCount: 1, totalPages: 1, hasPreviousPage: false, hasNextPage: false }
 const user = { userId: 'user-1', companyId: 'company-1', companyName: 'Northstar', companyAbbreviation: 'NORTHSTAR', userName: 'admin', email: 'admin@example.test', firstName: 'Ada', lastName: 'Admin', fullName: 'Ada Admin', roles: ['Company Admin'], permissions: ['employees.view', 'employees.manage'] }
 
@@ -50,13 +50,14 @@ describe('employee management frontend', () => {
     await client.type(screen.getByLabelText(/employee code/i), 'emp-2')
     await client.type(screen.getByLabelText(/first name/i), 'Jamie')
     await client.type(screen.getByLabelText(/last name/i), 'Lee')
+    await client.selectOptions(screen.getByLabelText(/^manager/i), 'manager-1')
     await client.type(screen.getByLabelText(/^username/i), 'jamie')
     await client.type(screen.getByLabelText(/^login email/i), 'jamie@example.test')
     await client.type(screen.getByLabelText(/^password/i), 'StrongPassword1!')
     await client.type(screen.getByLabelText(/confirm password/i), 'StrongPassword1!')
     await client.selectOptions(screen.getByLabelText(/^role/i), 'role-1')
     await client.click(screen.getByRole('button', { name: /^Add employee$/ }))
-    await waitFor(() => expect(body).toMatchObject({ employeeCode: 'EMP-2', createLoginAccount: true }))
+    await waitFor(() => expect(body).toMatchObject({ employeeCode: 'EMP-2', managerId: 'manager-1', createLoginAccount: true }))
     expect(body?.loginAccount).toMatchObject({ userName: 'jamie', email: 'jamie@example.test', roleId: 'role-1' })
   })
 

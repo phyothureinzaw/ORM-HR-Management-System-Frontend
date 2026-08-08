@@ -1,0 +1,3 @@
+import { NavLink } from 'react-router-dom'
+import { cn } from '../../../lib/utils'
+export function LeaveSettingsNavigation() { return <nav className="leave-settings-nav" aria-label="Leave settings"><NavLink to="/settings/leave/types" className={({ isActive }) => cn('leave-settings-link', isActive && 'leave-settings-link-active')}>Leave Types</NavLink><NavLink to="/settings/leave/balances" className={({ isActive }) => cn('leave-settings-link', isActive && 'leave-settings-link-active')}>Employee Balances</NavLink><NavLink to="/settings/leave/approvals" className={({ isActive }) => cn('leave-settings-link', isActive && 'leave-settings-link-active')}>Approval Workflow</NavLink></nav> }

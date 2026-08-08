@@ -1,0 +1,2 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query'; import { getLeaveApprovalQueue } from '../api/leaveRequestApi'; import { leaveKeys } from '../api/leaveKeys'; import type { LeaveRequestFilters } from '../types/leaveRequest.types'
+export function useLeaveApprovalQueue(filters: LeaveRequestFilters) { return useQuery({ queryKey: leaveKeys.approvalQueue(filters), queryFn: ({ signal }) => getLeaveApprovalQueue(filters, signal), placeholderData: keepPreviousData }) }

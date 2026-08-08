@@ -9,6 +9,7 @@ import { PermissionGuard } from '../features/auth/components/PermissionGuard'
 import { Permissions } from '../lib/permissions'
 import { server } from './server'
 import { renderWithProviders } from './testUtils'
+import { AUTH_SESSION_MARKER, markAuthSessionActive } from '../features/auth/session/authSession'
 
 const user = {
   userId: 'user-1', companyId: 'company-1', companyName: 'Northstar', companyAbbreviation: 'NORTHSTAR',
@@ -55,6 +56,9 @@ describe('authentication frontend', () => {
     expect(meAuthorization).toBe('Bearer access-token')
     expect(store.getState().auth.accessToken).toBe('access-token')
     expect(store.getState().auth.user?.companyName).toBe('Northstar')
+    expect(sessionStorage.getItem(AUTH_SESSION_MARKER)).toBe('active')
+    expect(sessionStorage.getItem('accessToken')).toBeNull()
+    expect(sessionStorage.getItem('refreshToken')).toBeNull()
   })
 
   it('maps registration success to Login without assuming automatic authentication', async () => {
@@ -76,13 +80,44 @@ describe('authentication frontend', () => {
   })
 
   it('restores a session from the HttpOnly-cookie refresh flow on bootstrap', async () => {
+    let refreshCount = 0
+    let meAuthorization: string | null = null
+    const actions: string[] = []
+    const unsubscribe = store.subscribe(() => {
+      const action = store.getState().auth
+      actions.push(`${action.status}:${action.accessToken ?? 'none'}`)
+    })
     server.use(
-      http.post('http://localhost:5278/api/auth/refresh-token', () => HttpResponse.json({ accessToken: 'restored-token', accessTokenExpiresAtUtc: '2030-01-01T00:00:00Z' })),
-      http.get('http://localhost:5278/api/auth/me', () => HttpResponse.json(user)),
+      http.post('http://localhost:5278/api/auth/refresh-token', () => { refreshCount += 1; return HttpResponse.json({ accessToken: 'restored-token', accessTokenExpiresAtUtc: '2030-01-01T00:00:00Z' }) }),
+      http.get('http://localhost:5278/api/auth/me', ({ request }) => { meAuthorization = request.headers.get('Authorization'); return HttpResponse.json(user) }),
     )
+    markAuthSessionActive()
     renderWithProviders(<App />, '/dashboard')
     expect(await screen.findByRole('heading', { name: /good to see you, ada/i })).toBeInTheDocument()
+    unsubscribe()
+    expect(refreshCount).toBe(1)
+    expect(meAuthorization).toBe('Bearer restored-token')
+    expect(actions.some((action) => action === 'bootstrapping:none')).toBe(true)
+    expect(actions.some((action) => action === 'bootstrapping:restored-token')).toBe(true)
     expect(store.getState().auth.accessToken).toBe('restored-token')
+  })
+
+  it('waits for bootstrap before redirecting when the refresh cookie is missing', async () => {
+    let refreshCount = 0
+    server.use(http.post('http://localhost:5278/api/auth/refresh-token', () => { refreshCount += 1; return HttpResponse.json({ title: 'Should not be called' }, { status: 401 }) }))
+    renderWithProviders(<App />, '/departments')
+    expect(await screen.findByRole('heading', { name: 'Sign in to your workspace' })).toBeInTheDocument()
+    expect(store.getState().auth.status).toBe('unauthenticated')
+    expect(refreshCount).toBe(0)
+    expect(sessionStorage.getItem(AUTH_SESSION_MARKER)).toBeNull()
+  })
+
+  it('keeps a recoverable error for a temporary bootstrap network failure', async () => {
+    markAuthSessionActive()
+    server.use(http.post('http://localhost:5278/api/auth/refresh-token', () => HttpResponse.error()))
+    renderWithProviders(<App />, '/dashboard')
+    expect(await screen.findByRole('heading', { name: 'Connection unavailable' })).toBeInTheDocument()
+    expect(store.getState().auth.status).toBe('error')
   })
 
   it('redirects an unauthenticated user away from protected content', async () => {
@@ -119,6 +154,7 @@ describe('authentication frontend', () => {
   it('clears local authentication when logout is already expired server-side', async () => {
     const client = userEvent.setup()
     store.dispatch(setAuthenticated({ accessToken: 'token', user }))
+    markAuthSessionActive()
     server.use(
       http.post('http://localhost:5278/api/auth/refresh-token', () => HttpResponse.json({ accessToken: 'token', accessTokenExpiresAtUtc: '2030-01-01T00:00:00Z' })),
       http.get('http://localhost:5278/api/auth/me', () => HttpResponse.json(user)),
@@ -130,5 +166,14 @@ describe('authentication frontend', () => {
     await client.click(screen.getByRole('button', { name: 'Sign out' }))
     expect(await screen.findByRole('heading', { name: 'Sign in to your workspace' })).toBeInTheDocument()
     expect(store.getState().auth.status).toBe('unauthenticated')
+    expect(sessionStorage.getItem(AUTH_SESSION_MARKER)).toBeNull()
+  })
+
+  it('removes the tab marker when a marked session has an invalid refresh token', async () => {
+    markAuthSessionActive()
+    renderWithProviders(<App />, '/dashboard')
+
+    expect(await screen.findByRole('heading', { name: 'Sign in to your workspace' })).toBeInTheDocument()
+    expect(sessionStorage.getItem(AUTH_SESSION_MARKER)).toBeNull()
   })
 })

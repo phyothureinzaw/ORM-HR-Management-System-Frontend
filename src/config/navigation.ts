@@ -22,10 +22,10 @@ export const navigationItems: NavigationItem[] = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, status: 'ready' },
   { label: 'Departments', href: '/departments', icon: BriefcaseBusiness, status: 'ready' },
   { label: 'Employees', href: '/employees', icon: Users, status: 'ready' },
-  { label: 'Leave', href: '/leave', icon: CalendarDays, status: 'planned' },
+  { label: 'Leave', href: '/leave', icon: CalendarDays, status: 'ready' },
   { label: 'Overtime', href: '/overtime', icon: Clock3, status: 'planned' },
   { label: 'Attendance', href: '/attendance', icon: BarChart3, status: 'planned' },
   { label: 'Petty Cash', href: '/petty-cash', icon: WalletCards, status: 'planned' },
   { label: 'Reports', href: '/reports', icon: FileBarChart, status: 'planned' },
-  { label: 'Settings', href: '/settings', icon: Settings, status: 'planned' },
+  { label: 'Settings', href: '/settings/leave/types', icon: Settings, status: 'ready' },
 ]

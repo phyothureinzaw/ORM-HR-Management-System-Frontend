@@ -1,0 +1,3 @@
+import type { LeaveBalance } from '../types/leave.types'
+const amount = (value: number) => `${value.toLocaleString(undefined, { maximumFractionDigits: 2 })} days`
+export function LeaveBalanceCards({ balances }: { balances: LeaveBalance[] }) { if (!balances.length) return <p className="muted">No current-year leave balances are configured.</p>; return <div className="balance-grid">{balances.map((balance) => <article className="card balance-card" key={balance.id}><strong>{balance.leaveType.name}</strong><span>Available <b>{amount(balance.availableDays)}</b></span><span>Pending <b>{amount(balance.pendingDays)}</b></span><span>Used <b>{amount(balance.usedDays)}</b></span><small>Total allocated: {amount(balance.totalAllocatedDays)}</small></article>)}</div> }

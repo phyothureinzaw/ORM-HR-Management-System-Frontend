@@ -1,4 +1,4 @@
-import { apiClient } from '../../../lib/api/apiClient'
+import { apiClient, refreshAccessToken } from '../../../lib/api/apiClient'
 import type { AuthenticationResponse, CurrentUser, LoginRequest, RegisterCompanyRequest, RegistrationResponse } from '../types/auth.types'
 
 export async function registerCompany(request: RegisterCompanyRequest): Promise<RegistrationResponse> {
@@ -12,8 +12,7 @@ export async function login(request: LoginRequest): Promise<AuthenticationRespon
 }
 
 export async function refreshToken(): Promise<AuthenticationResponse> {
-  const response = await apiClient.post<AuthenticationResponse>('/api/auth/refresh-token', undefined, { headers: { 'X-Skip-Auth-Refresh': 'true' } })
-  return response.data
+  return refreshAccessToken()
 }
 
 export async function logout(): Promise<void> {

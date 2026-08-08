@@ -1,0 +1,2 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query'; import { getMyLeaveRequests } from '../api/leaveRequestApi'; import { leaveKeys } from '../api/leaveKeys'; import type { LeaveRequestFilters } from '../types/leaveRequest.types'
+export function useMyLeaveRequests(filters: LeaveRequestFilters) { return useQuery({ queryKey: leaveKeys.myRequests(filters), queryFn: ({ signal }) => getMyLeaveRequests(filters, signal), placeholderData: keepPreviousData }) }
