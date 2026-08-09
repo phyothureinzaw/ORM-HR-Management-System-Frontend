@@ -1,4 +1,4 @@
-import type { AttendanceHistoryFilters, CompanyAttendanceFilters } from '../types/attendance.types'
+import type { AttendanceCorrectionQueueFilters, AttendanceCorrectionsFilters, AttendanceHistoryFilters, CompanyAttendanceFilters } from '../types/attendance.types'
 
 export const attendanceKeys = {
   all: ['attendance'] as const,
@@ -10,6 +10,12 @@ export const attendanceKeys = {
   companyList: (filters: CompanyAttendanceFilters) => [...attendanceKeys.all, 'company-list', normalizeCompanyFilters(filters)] as const,
   companyDetails: (id: string) => [...attendanceKeys.all, 'company-details', id] as const,
   dashboardSummary: (date: string) => [...attendanceKeys.all, 'dashboard-summary', date] as const,
+  correctionOptions: (id: string) => [...attendanceKeys.all, 'correction-options', id] as const,
+  myCorrections: (filters: AttendanceCorrectionsFilters) => [...attendanceKeys.all, 'my-corrections', filters] as const,
+  myCorrectionDetails: (id: string) => [...attendanceKeys.all, 'my-correction-details', id] as const,
+  correctionQueue: (filters: AttendanceCorrectionQueueFilters) => [...attendanceKeys.all, 'correction-queue', filters] as const,
+  correctionQueueOptions: () => [...attendanceKeys.all, 'correction-queue-options'] as const,
+  correctionReviewDetails: (id: string) => [...attendanceKeys.all, 'correction-review-details', id] as const,
 }
 
 function normalizeCompanyFilters(filters: CompanyAttendanceFilters) {

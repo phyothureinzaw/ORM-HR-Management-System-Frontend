@@ -93,3 +93,24 @@ export type CompanyAttendanceFilters = {
 }
 
 export type DepartmentSummary = DepartmentOption
+
+export type AttendanceCorrectionStatus = 1 | 2 | 3 | 4
+export type AttendanceCorrectionOptions = {
+  attendanceRecordId: string; attendanceDate: string; currentStatus: AttendanceStatus; shift: AttendanceShiftSummary | null
+  scheduledStartDateTimeUtc: string | null; scheduledEndDateTimeUtc: string | null; currentCheckInDateTimeUtc: string | null; currentCheckOutDateTimeUtc: string | null
+  allowCorrectionRequests: boolean; eligible: boolean; hasPendingCorrection: boolean; canRequestCorrection: boolean; blockingReason: string | null
+  companyTimeZoneId: string; allowedStartDateTimeUtc: string | null; allowedEndDateTimeUtc: string | null; rowVersion: string
+}
+export type AddAttendanceCorrectionInput = { attendanceRecordId: string; requestedCheckInDateTime?: string | null; requestedCheckOutDateTime?: string | null; reason: string; employeeComment?: string | null }
+export type AttendanceCorrectionSummary = {
+  id: string; attendanceRecordId: string; employee: AttendanceEmployeeSummary; attendanceDate: string
+  originalCheckInDateTimeUtc: string | null; originalCheckOutDateTimeUtc: string | null; requestedCheckInDateTimeUtc: string | null; requestedCheckOutDateTimeUtc: string | null
+  reason: string; status: AttendanceCorrectionStatus; requestedAtUtc: string; reviewedAtUtc: string | null; reviewerComment: string | null; canCancel: boolean; department: string | null; shift: AttendanceShiftSummary | null; rowVersion: string
+}
+export type AttendanceRecordDetails = { correction: AttendanceCorrectionSummary; attendance: AttendanceRecord; employeeComment: string | null; companyTimeZoneId: string | null }
+export type AttendanceCorrectionReviewDetails = { details: AttendanceRecordDetails; requestedByUser: string | null; reviewedByUser: string | null; department: string | null }
+export type AttendanceCorrectionsFilters = { status?: AttendanceCorrectionStatus; startDate?: string; endDate?: string; page: number; pageSize: number }
+export type AttendanceCorrectionQueueFilters = { search?: string; employeeId?: string; departmentId?: string; status?: AttendanceCorrectionStatus; attendanceStartDate?: string; attendanceEndDate?: string; requestStartDate?: string; requestEndDate?: string; page: number; pageSize: number }
+export type AttendanceCorrectionDecisionInput = { reviewerComment?: string | null; rowVersion: string; attendanceRecordRowVersion?: string | null }
+export type CancelAttendanceCorrectionInput = { rowVersion: string }
+export type AttendanceCorrectionQueueOptions = { employees: { id: string; employeeCode: string; fullName: string; departmentId: string | null }[]; departments: { id: string; code: string; name: string }[] }

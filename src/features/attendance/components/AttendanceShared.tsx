@@ -9,11 +9,12 @@ import { Permissions } from '../../../lib/permissions'
 
 export function AttendanceNavigation() {
   const location = useLocation()
-  if (location.pathname === '/dashboard' || location.pathname === '/dashboard/attendance' || location.pathname.startsWith('/dashboard/attendance/')) return null
+  if (location.pathname === '/dashboard' || location.pathname === '/dashboard/attendance' || location.pathname.startsWith('/dashboard/attendance/')) return <AttendanceCorrectionNavigation />
   return <nav className="attendance-subnav" aria-label="Attendance configuration"><NavLink to="/attendance/shifts">Work Shifts</NavLink><NavLink to="/attendance/locations">Locations</NavLink><NavLink to="/attendance/assignments">Shift Assignments</NavLink><NavLink to="/attendance/settings">Attendance Settings</NavLink></nav>
 }
+export function AttendanceCorrectionNavigation() { return <PermissionGuard permission={Permissions.Attendance.Correct}><nav className="attendance-subnav" aria-label="Attendance review"><NavLink to="/dashboard/attendance">Attendance Monitoring</NavLink><NavLink to="/dashboard/attendance/corrections">Correction Requests</NavLink></nav></PermissionGuard> }
 
-export function EmployeeAttendanceNavigation() { return <><nav className="attendance-subnav" aria-label="My Attendance"><NavLink to="/attendance">Today</NavLink><NavLink to="/attendance/history">My History</NavLink></nav><PermissionGuard permission={Permissions.Attendance.Manage}><AttendanceNavigation /></PermissionGuard></> }
+export function EmployeeAttendanceNavigation() { return <><nav className="attendance-subnav" aria-label="My Attendance"><NavLink to="/attendance">Today</NavLink><NavLink to="/attendance/history">My History</NavLink><NavLink to="/attendance/corrections">My Corrections</NavLink></nav><PermissionGuard permission={Permissions.Attendance.Manage}><AttendanceNavigation /></PermissionGuard></> }
 
 export function AttendancePageHeader({ title, description, action }: { title: string; description: string; action?: React.ReactNode }) {
   return <><PageHeader eyebrow="Attendance / Configuration" title={title} description={description} action={action} /><AttendanceNavigation /></>

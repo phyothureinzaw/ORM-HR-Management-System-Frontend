@@ -35,6 +35,11 @@ import { AttendanceHistoryPage } from '../features/attendance/pages/AttendanceHi
 import { AttendanceDetailsPage } from '../features/attendance/pages/AttendanceDetailsPage'
 import { CompanyAttendancePage } from '../features/attendance/pages/CompanyAttendancePage'
 import { CompanyAttendanceDetailsPage } from '../features/attendance/pages/CompanyAttendanceDetailsPage'
+import { MyAttendanceCorrectionsPage } from '../features/attendance/pages/MyAttendanceCorrectionsPage'
+import { AttendanceCorrectionFormPage } from '../features/attendance/pages/AttendanceCorrectionFormPage'
+import { AttendanceCorrectionDetailsPage } from '../features/attendance/pages/AttendanceCorrectionDetailsPage'
+import { AttendanceCorrectionQueuePage } from '../features/attendance/pages/AttendanceCorrectionQueuePage'
+import { AttendanceCorrectionReviewPage } from '../features/attendance/pages/AttendanceCorrectionReviewPage'
 import { PermissionGuard } from '../features/auth/components/PermissionGuard'
 import { Permissions } from '../lib/permissions'
 
@@ -64,8 +69,13 @@ export function AppRouter() {
         <Route path="/overtime" element={<FeaturePlaceholderPage title="Overtime" />} />
           <Route path="/attendance" element={<AttendanceTodayPage />} />
           <Route path="/attendance/history" element={<AttendanceHistoryPage />} />
-           <Route path="/attendance/my/:attendanceRecordId" element={<AttendanceDetailsPage />} />
-           <Route path="/dashboard/attendance" element={<CompanyAttendancePage />} />
+            <Route path="/attendance/my/:attendanceRecordId" element={<AttendanceDetailsPage />} />
+            <Route path="/attendance/corrections" element={<MyAttendanceCorrectionsPage />} />
+            <Route path="/attendance/corrections/new/:attendanceRecordId" element={<AttendanceCorrectionFormPage />} />
+            <Route path="/attendance/corrections/:correctionId" element={<AttendanceCorrectionDetailsPage />} />
+            <Route path="/dashboard/attendance" element={<CompanyAttendancePage />} />
+            <Route path="/dashboard/attendance/corrections" element={<AttendanceCorrectionQueuePage />} />
+            <Route path="/dashboard/attendance/corrections/:correctionId" element={<AttendanceCorrectionReviewPage />} />
            <Route path="/dashboard/attendance/:attendanceRecordId" element={<CompanyAttendanceDetailsPage />} />
            <Route path="/attendance/company/:attendanceRecordId" element={<AttendanceMonitoringDetailsRedirect />} />
            <Route path="/attendance/company" element={<AttendanceMonitoringRedirect />} />
