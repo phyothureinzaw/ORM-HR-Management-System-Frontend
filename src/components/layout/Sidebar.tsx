@@ -13,7 +13,8 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const canViewEmployees = usePermission(Permissions.Employees.View)
   const canViewLeave = usePermission(Permissions.Leaves.View)
   const canManageLeave = usePermission(Permissions.Leaves.Manage)
-  const visibleItems = navigationItems.filter((item) => (item.label !== 'Departments' || canViewDepartments) && (item.label !== 'Employees' || canViewEmployees) && (item.label !== 'Leave' || canViewLeave) && (item.label !== 'Settings' || canManageLeave))
+  const canViewAttendance = usePermission(Permissions.Attendance.View)
+  const visibleItems = navigationItems.filter((item) => (item.label !== 'Departments' || canViewDepartments) && (item.label !== 'Employees' || canViewEmployees) && (item.label !== 'Leave' || canViewLeave) && (item.label !== 'Attendance' || canViewAttendance) && (item.label !== 'Settings' || canManageLeave))
   return (
     <aside className="sidebar" aria-label="Main navigation">
       <div className="brand-lockup">

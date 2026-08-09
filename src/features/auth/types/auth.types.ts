@@ -40,6 +40,7 @@ export type CurrentUser = {
   fullName: string
   roles: string[]
   permissions: string[]
+  timeZoneId?: string
 }
 
 export type AuthState = {

@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { GuestRoute } from '../features/auth/components/GuestRoute'
 import { ProtectedRoute } from '../features/auth/components/ProtectedRoute'
@@ -23,6 +23,20 @@ import { UpdateLeaveRequestPage } from '../features/leave/pages/UpdateLeaveReque
 import { LeaveRequestDetailsPage } from '../features/leave/pages/LeaveRequestDetailsPage'
 import { LeaveApprovalQueuePage } from '../features/leave/pages/LeaveApprovalQueuePage'
 import { CompanyLeaveRequestsPage } from '../features/leave/pages/CompanyLeaveRequestsPage'
+import { WorkShiftsPage } from '../features/attendance/pages/WorkShiftsPage'
+import { WorkShiftFormPage } from '../features/attendance/pages/WorkShiftFormPage'
+import { LocationsPage } from '../features/attendance/pages/LocationsPage'
+import { LocationFormPage } from '../features/attendance/pages/LocationFormPage'
+import { AssignmentsPage } from '../features/attendance/pages/AssignmentsPage'
+import { AssignmentFormPage } from '../features/attendance/pages/AssignmentFormPage'
+import { AttendanceSettingsPage } from '../features/attendance/pages/AttendanceSettingsPage'
+import { AttendanceTodayPage } from '../features/attendance/pages/AttendanceTodayPage'
+import { AttendanceHistoryPage } from '../features/attendance/pages/AttendanceHistoryPage'
+import { AttendanceDetailsPage } from '../features/attendance/pages/AttendanceDetailsPage'
+import { CompanyAttendancePage } from '../features/attendance/pages/CompanyAttendancePage'
+import { CompanyAttendanceDetailsPage } from '../features/attendance/pages/CompanyAttendanceDetailsPage'
+import { PermissionGuard } from '../features/auth/components/PermissionGuard'
+import { Permissions } from '../lib/permissions'
 
 export function AppRouter() {
   return (
@@ -48,7 +62,23 @@ export function AppRouter() {
          <Route path="/leave/:leaveRequestId/edit" element={<UpdateLeaveRequestPage />} />
          <Route path="/leave/:leaveRequestId" element={<LeaveRequestDetailsPage />} />
         <Route path="/overtime" element={<FeaturePlaceholderPage title="Overtime" />} />
-        <Route path="/attendance" element={<FeaturePlaceholderPage title="Attendance" />} />
+          <Route path="/attendance" element={<AttendanceTodayPage />} />
+          <Route path="/attendance/history" element={<AttendanceHistoryPage />} />
+           <Route path="/attendance/my/:attendanceRecordId" element={<AttendanceDetailsPage />} />
+           <Route path="/dashboard/attendance" element={<CompanyAttendancePage />} />
+           <Route path="/dashboard/attendance/:attendanceRecordId" element={<CompanyAttendanceDetailsPage />} />
+           <Route path="/attendance/company/:attendanceRecordId" element={<AttendanceMonitoringDetailsRedirect />} />
+           <Route path="/attendance/company" element={<AttendanceMonitoringRedirect />} />
+         <Route path="/attendance/settings" element={<AttendanceSettingsPage />} />
+         <Route path="/attendance/shifts" element={<WorkShiftsPage />} />
+         <Route path="/attendance/shifts/new" element={<WorkShiftFormPage />} />
+         <Route path="/attendance/shifts/:shiftId/edit" element={<WorkShiftFormPage />} />
+         <Route path="/attendance/locations" element={<LocationsPage />} />
+         <Route path="/attendance/locations/new" element={<LocationFormPage />} />
+         <Route path="/attendance/locations/:locationId/edit" element={<LocationFormPage />} />
+         <Route path="/attendance/assignments" element={<AssignmentsPage />} />
+         <Route path="/attendance/assignments/new" element={<AssignmentFormPage />} />
+         <Route path="/attendance/assignments/:assignmentId/edit" element={<AssignmentFormPage />} />
         <Route path="/petty-cash" element={<FeaturePlaceholderPage title="Petty Cash" />} />
         <Route path="/reports" element={<FeaturePlaceholderPage title="Reports" />} />
          <Route path="/settings" element={<FeaturePlaceholderPage title="Settings" />} />
@@ -64,4 +94,15 @@ export function AppRouter() {
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
+}
+
+function AttendanceMonitoringRedirect() {
+  const location = useLocation()
+  return <PermissionGuard permission={Permissions.Attendance.Manage} fallback={<Navigate to="/unauthorized" replace />}><Navigate to={`/dashboard${location.search}`} replace /></PermissionGuard>
+}
+
+function AttendanceMonitoringDetailsRedirect() {
+  const { attendanceRecordId } = useParams()
+  const location = useLocation()
+  return <PermissionGuard permission={Permissions.Attendance.Manage} fallback={<Navigate to="/unauthorized" replace />}><Navigate to={`/dashboard/attendance/${attendanceRecordId ?? ''}${location.search}`} replace /></PermissionGuard>
 }
