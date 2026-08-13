@@ -14,7 +14,12 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const canViewLeave = usePermission(Permissions.Leaves.View)
   const canManageLeave = usePermission(Permissions.Leaves.Manage)
   const canViewAttendance = usePermission(Permissions.Attendance.View)
-  const visibleItems = navigationItems.filter((item) => (item.label !== 'Departments' || canViewDepartments) && (item.label !== 'Employees' || canViewEmployees) && (item.label !== 'Leave' || canViewLeave) && (item.label !== 'Attendance' || canViewAttendance) && (item.label !== 'Settings' || canManageLeave))
+  const canManageOvertime = usePermission(Permissions.Overtime.Manage)
+  const canViewOvertime = usePermission(Permissions.Overtime.View)
+  const canRequestOvertime = usePermission(Permissions.Overtime.Request)
+  const canApproveOvertime = usePermission(Permissions.Overtime.Approve)
+  const overtimeHref = canManageOvertime ? '/overtime/types' : canViewOvertime ? '/overtime' : canApproveOvertime ? '/overtime/approvals' : '/overtime/new'
+  const visibleItems = navigationItems.filter((item) => (item.label !== 'Departments' || canViewDepartments) && (item.label !== 'Employees' || canViewEmployees) && (item.label !== 'Leave' || canViewLeave) && (item.label !== 'Overtime' || canManageOvertime || canViewOvertime || canRequestOvertime || canApproveOvertime) && (item.label !== 'Overtime Monitoring' || canManageOvertime) && (item.label !== 'Attendance' || canViewAttendance) && (item.label !== 'Settings' || canManageLeave))
   return (
     <aside className="sidebar" aria-label="Main navigation">
       <div className="brand-lockup">
@@ -27,7 +32,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
         {visibleItems.slice(0, 7).map((item) => {
           const Icon = item.icon
           return item.status === 'ready' ? (
-            <NavLink key={item.label} to={item.href} onClick={onNavigate} className={({ isActive }) => cn('navigation-link', isActive && 'navigation-link-active')}>
+            <NavLink key={item.label} to={item.label === 'Overtime' ? overtimeHref : item.href} onClick={onNavigate} className={({ isActive }) => cn('navigation-link', isActive && 'navigation-link-active')}>
               <Icon size={17} aria-hidden="true" /><span>{item.label}</span><ChevronRight className="nav-chevron" size={14} aria-hidden="true" />
             </NavLink>
           ) : <div key={item.label} className="navigation-link navigation-link-disabled" aria-disabled="true"><Icon size={17} aria-hidden="true" /><span>{item.label}</span><span className="planned-label">Soon</span></div>

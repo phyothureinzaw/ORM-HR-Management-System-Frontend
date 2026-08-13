@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import type { ReactNode } from 'react'
 import { AppShell } from '../components/layout/AppShell'
 import { GuestRoute } from '../features/auth/components/GuestRoute'
 import { ProtectedRoute } from '../features/auth/components/ProtectedRoute'
@@ -42,6 +43,17 @@ import { AttendanceCorrectionQueuePage } from '../features/attendance/pages/Atte
 import { AttendanceCorrectionReviewPage } from '../features/attendance/pages/AttendanceCorrectionReviewPage'
 import { PermissionGuard } from '../features/auth/components/PermissionGuard'
 import { Permissions } from '../lib/permissions'
+import { OvertimeTypesPage, OvertimeTypeFormPage } from '../features/overtime/pages/OvertimeTypesPage'
+import { OvertimeProjectsPage, OvertimeProjectFormPage } from '../features/overtime/pages/OvertimeProjectsPage'
+import { OvertimeSettingsPage } from '../features/overtime/pages/OvertimeSettingsPage'
+import { OvertimeApprovalPage, OvertimeApprovalLevelFormPage } from '../features/overtime/pages/OvertimeApprovalPage'
+import { OvertimeRequestsPage } from '../features/overtime/pages/OvertimeRequestsPage'
+import { OvertimeRequestFormPage } from '../features/overtime/pages/OvertimeRequestFormPage'
+import { OvertimeRequestDetailsPage } from '../features/overtime/pages/OvertimeRequestDetailsPage'
+import { OvertimeApprovalQueuePage } from '../features/overtime/pages/OvertimeApprovalQueuePage'
+import { OvertimeApprovalDetailsPage } from '../features/overtime/pages/OvertimeApprovalDetailsPage'
+import { CompanyOvertimePage } from '../features/overtime/pages/CompanyOvertimePage'
+import { CompanyOvertimeDetailsPage } from '../features/overtime/pages/CompanyOvertimeDetailsPage'
 
 export function AppRouter() {
   return (
@@ -66,7 +78,22 @@ export function AppRouter() {
          <Route path="/leave/company" element={<CompanyLeaveRequestsPage />} />
          <Route path="/leave/:leaveRequestId/edit" element={<UpdateLeaveRequestPage />} />
          <Route path="/leave/:leaveRequestId" element={<LeaveRequestDetailsPage />} />
-        <Route path="/overtime" element={<FeaturePlaceholderPage title="Overtime" />} />
+          <Route path="/overtime" element={<OvertimeRequestsPage />} />
+          <Route path="/overtime/new" element={<OvertimeRequestFormPage />} />
+          <Route path="/overtime/requests/:overtimeRequestId" element={<OvertimeRequestDetailsPage />} />
+          <Route path="/overtime/requests/:overtimeRequestId/edit" element={<OvertimeRequestFormPage />} />
+          <Route path="/overtime/approvals" element={<OvertimeApprovalQueuePage />} />
+          <Route path="/overtime/approvals/:overtimeRequestId" element={<OvertimeApprovalDetailsPage />} />
+          <Route path="/overtime/types" element={overtime(<OvertimeTypesPage />)} />
+          <Route path="/overtime/types/new" element={overtime(<OvertimeTypeFormPage />)} />
+          <Route path="/overtime/types/:overtimeTypeId/edit" element={overtime(<OvertimeTypeFormPage />)} />
+          <Route path="/overtime/projects" element={overtime(<OvertimeProjectsPage />)} />
+          <Route path="/overtime/projects/new" element={overtime(<OvertimeProjectFormPage />)} />
+          <Route path="/overtime/projects/:overtimeProjectId/edit" element={overtime(<OvertimeProjectFormPage />)} />
+          <Route path="/overtime/settings" element={overtime(<OvertimeSettingsPage />)} />
+          <Route path="/overtime/approval" element={overtime(<OvertimeApprovalPage />)} />
+          <Route path="/overtime/approval/levels/new" element={overtime(<OvertimeApprovalLevelFormPage />)} />
+          <Route path="/overtime/approval/levels/:approvalLevelId/edit" element={overtime(<OvertimeApprovalLevelFormPage />)} />
           <Route path="/attendance" element={<AttendanceTodayPage />} />
           <Route path="/attendance/history" element={<AttendanceHistoryPage />} />
             <Route path="/attendance/my/:attendanceRecordId" element={<AttendanceDetailsPage />} />
@@ -76,7 +103,9 @@ export function AppRouter() {
             <Route path="/dashboard/attendance" element={<CompanyAttendancePage />} />
             <Route path="/dashboard/attendance/corrections" element={<AttendanceCorrectionQueuePage />} />
             <Route path="/dashboard/attendance/corrections/:correctionId" element={<AttendanceCorrectionReviewPage />} />
-           <Route path="/dashboard/attendance/:attendanceRecordId" element={<CompanyAttendanceDetailsPage />} />
+             <Route path="/dashboard/attendance/:attendanceRecordId" element={<CompanyAttendanceDetailsPage />} />
+            <Route path="/dashboard/overtime" element={overtime(<CompanyOvertimePage />)} />
+            <Route path="/dashboard/overtime/requests/:overtimeRequestId" element={overtime(<CompanyOvertimeDetailsPage />)} />
            <Route path="/attendance/company/:attendanceRecordId" element={<AttendanceMonitoringDetailsRedirect />} />
            <Route path="/attendance/company" element={<AttendanceMonitoringRedirect />} />
          <Route path="/attendance/settings" element={<AttendanceSettingsPage />} />
@@ -104,6 +133,10 @@ export function AppRouter() {
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
+}
+
+function overtime(element: ReactNode) {
+  return <PermissionGuard permission={Permissions.Overtime.Manage} fallback={<Navigate to="/unauthorized" replace />}>{element}</PermissionGuard>
 }
 
 function AttendanceMonitoringRedirect() {

@@ -111,6 +111,93 @@ p { line-height: 1.55; }
 .account-popover button { width: 100%; padding: 8px 7px; border: 0; border-radius: 6px; background: transparent; color: var(--foreground); text-align: left; font-size: 0.8125rem; cursor: pointer; }
 .account-popover button:hover { background: var(--muted); }
 .shell-content { width: min(1180px, 100%); margin: 0 auto; padding: 36px 32px 52px; }
+.overtime-page { display: grid; gap: 24px; }
+.overtime-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; }
+.overtime-search, .overtime-filter { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 11px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); color: var(--muted-foreground); }
+.overtime-search { min-width: min(360px, 100%); flex: 1; } .overtime-search input, .overtime-filter select { min-width: 0; border: 0; outline: 0; background: transparent; color: var(--foreground); }
+.overtime-filter select { padding: 0 4px; }
+.overtime-table-wrap { overflow-x: auto; } .overtime-table { width: 100%; border-collapse: collapse; font-size: .875rem; } .overtime-table th { padding: 0 12px 12px; color: var(--muted-foreground); font-size: .7rem; letter-spacing: .06em; text-align: left; text-transform: uppercase; white-space: nowrap; } .overtime-table td { padding: 14px 12px; border-top: 1px solid var(--border); vertical-align: middle; } .overtime-table td:first-child, .overtime-table th:first-child { padding-left: 0; } .overtime-actions { display: flex; justify-content: flex-end; gap: 4px; white-space: nowrap; }
+.overtime-status { display: inline-flex; padding: 4px 9px; border-radius: 999px; font-size: .75rem; font-weight: 700; } .overtime-status.is-active { background: #dcfce7; color: #166534; } .overtime-status.is-inactive { background: #f1f5f9; color: #64748b; }
+.overtime-empty, .overtime-loading { padding: 34px 0; color: var(--muted-foreground); text-align: center; } .overtime-alert, .overtime-note { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 13px 15px; border: 1px solid #fecaca; border-radius: var(--radius-sm); background: #fff1f2; color: #991b1b; } .overtime-note { display: block; border-color: #bfdbfe; background: #eff6ff; color: #1e40af; }
+.overtime-confirm { display: grid; gap: 10px; margin-top: 20px; padding: 16px; border: 1px solid #fed7aa; border-radius: var(--radius-sm); background: #fff7ed; color: #9a3412; } .overtime-confirm div { display: flex; gap: 8px; justify-content: flex-end; }
+.overtime-form { display: grid; gap: 24px; } .overtime-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 16px; } .overtime-form label, .overtime-approval-settings > label:not(.overtime-toggle) { display: grid; gap: 7px; color: var(--foreground); font-size: .8125rem; font-weight: 700; } .overtime-form input:not([type=checkbox]), .overtime-form textarea, .overtime-form select, .overtime-approval-settings input, .overtime-approval-settings select { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid var(--input); border-radius: var(--radius-sm); background: var(--card); color: var(--foreground); font-weight: 400; } .overtime-form textarea { min-height: 100px; resize: vertical; } .overtime-form small, .overtime-toggle small { color: var(--muted-foreground); font-size: .75rem; font-weight: 400; } .overtime-check { display: flex !important; align-items: center; grid-template-columns: auto 1fr; gap: 9px !important; } .overtime-check input { width: 17px; height: 17px; accent-color: var(--primary); } .overtime-form-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 4px; }
+.overtime-section { display: grid; grid-template-columns: minmax(180px, .7fr) minmax(0, 1.3fr); gap: 26px; padding: 4px 0 26px; border-bottom: 1px solid var(--border); } .overtime-section:last-of-type { border-bottom: 0; } .overtime-section h2 { margin-bottom: 5px; } .overtime-section p { color: var(--muted-foreground); font-size: .8125rem; } .overtime-settings-grid { display: grid; gap: 12px; } .overtime-toggle { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fbfdff; } .overtime-toggle span { display: grid; gap: 3px; } .overtime-toggle input { width: 18px; height: 18px; accent-color: var(--primary); }
+.overtime-approval-settings { display: flex; flex-wrap: wrap; align-items: end; gap: 18px; } .overtime-approval-settings > label:not(.overtime-toggle) { width: 180px; } .overtime-approval-settings .overtime-toggle { flex: 1; min-width: 260px; }
+@media (max-width: 720px) { .shell-content { padding: 28px 18px 42px; } .page-header { flex-direction: column; gap: 16px; } .page-header-action { width: 100%; } .page-header-action .button { width: 100%; } .overtime-form-grid, .overtime-section { grid-template-columns: 1fr; } .overtime-section { gap: 16px; } .overtime-toolbar > * { width: 100%; } .overtime-search { min-width: 0; } .overtime-table { min-width: 720px; } .overtime-approval-settings { align-items: stretch; flex-direction: column; } .overtime-approval-settings > label:not(.overtime-toggle) { width: 100%; } .overtime-approval-settings .button { width: 100%; } }
+
+.overtime-navigation { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+.overtime-navigation a { padding: 8px 10px; border-radius: var(--radius-sm); color: var(--muted-foreground); font-size: .8125rem; font-weight: 700; text-decoration: none; }
+.overtime-navigation a:hover, .overtime-navigation a.active { background: #eef2ff; color: #4338ca; }
+.overtime-pagination { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 18px; color: var(--muted-foreground); font-size: .8125rem; }
+.overtime-pagination > div { display: flex; align-items: center; gap: 10px; }
+.overtime-detail-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.overtime-detail-actions .action-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.overtime-detail-actions input { min-height: 40px; min-width: min(280px, 100%); padding: 8px 10px; border: 1px solid var(--input); border-radius: var(--radius-sm); }
+.overtime-detail-grid, .overtime-summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 16px; }
+.overtime-detail-item, .overtime-detail-grid > div { display: grid; gap: 5px; }
+.overtime-detail-item small, .overtime-detail-grid small, .overtime-summary-grid span { color: var(--muted-foreground); font-size: .75rem; }
+.overtime-detail-item strong, .overtime-detail-grid strong, .overtime-summary-grid strong { color: var(--foreground); font-size: .9rem; font-weight: 650; }
+.overtime-detail-wide { grid-column: 1 / -1; display: grid; gap: 8px; }
+.overtime-related-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.overtime-related-grid h2, .overtime-calculation h2 { margin-bottom: 12px; }
+.overtime-summary-grid span { display: grid; gap: 5px; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.overtime-timeline { display: grid; gap: 14px; }
+.overtime-timeline > div { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; padding: 12px 0; border-top: 1px solid var(--border); }
+.overtime-timeline p { grid-column: 1 / -1; margin: 0; color: var(--muted-foreground); }
+.overtime-request-status-1 { background: #fef3c7; color: #92400e; }
+.overtime-request-status-2 { background: #dcfce7; color: #166534; }
+.overtime-request-status-3 { background: #fee2e2; color: #991b1b; }
+.overtime-request-status-4 { background: #f1f5f9; color: #475569; }
+@media (max-width: 720px) { .overtime-navigation { overflow-x: auto; flex-wrap: nowrap; } .overtime-navigation a { white-space: nowrap; } .overtime-detail-grid, .overtime-summary-grid, .overtime-related-grid { grid-template-columns: 1fr; } .overtime-pagination { align-items: stretch; flex-direction: column; } .overtime-pagination > div { justify-content: space-between; } .overtime-timeline > div { grid-template-columns: 1fr; } }
+.overtime-monitoring-page { gap: 18px; min-width: 0; }
+.overtime-monitoring-page > * { min-width: 0; max-width: 100%; }
+.overtime-monitoring-date { display: flex; align-items: center; gap: 7px; color: var(--muted-foreground); font-size: .78rem; }
+.overtime-monitor-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.overtime-monitor-summary-card .card-content { display: flex; align-items: flex-start; gap: 12px; min-height: 104px; padding: 17px 18px; }
+.overtime-monitor-summary-card .card-content > div:last-child { display: grid; gap: 4px; min-width: 0; }
+.overtime-monitor-summary-card .card-content > div:last-child > span { color: var(--muted-foreground); font-size: .75rem; font-weight: 700; }
+.overtime-monitor-summary-card strong { color: var(--foreground); font-size: 1.4rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.overtime-monitor-summary-card small { color: var(--muted-foreground); font-size: .7rem; }
+.overtime-monitor-summary-icon { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 auto; border-radius: 8px; background: #eef2ff; color: #4f46e5; }
+.overtime-monitor-summary-card.summary-positive .overtime-monitor-summary-icon { background: #ecfdf5; color: #15803d; }
+.overtime-monitor-summary-card.summary-warning .overtime-monitor-summary-icon { background: #fffbeb; color: #b45309; }
+.overtime-monitor-summary-card.summary-muted .overtime-monitor-summary-icon { background: #f1f5f9; color: #64748b; }
+.overtime-monitor-summary-skeleton { min-height: 104px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #e2e8f0; animation: pulse 1.4s ease-in-out infinite; }
+.overtime-monitoring-surface .card-content { padding: 20px 22px 22px; }
+.overtime-monitoring-toolbar { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 11px; margin-bottom: 20px; }
+.overtime-monitoring-toolbar > .overtime-search { width: min(100%, 330px); min-width: 0; flex: 1 1 230px; }
+.overtime-monitoring-field { display: grid; gap: 5px; min-width: 0; flex: 1 1 135px; }
+.overtime-monitoring-field span { color: var(--muted-foreground); font-size: .69rem; font-weight: 700; }
+.overtime-monitoring-field input, .overtime-monitoring-field select { width: 100%; min-width: 0; min-height: 40px; border: 1px solid var(--input); border-radius: var(--radius-sm); padding: 0 9px; background: var(--card); color: var(--foreground); font-size: .8rem; }
+.overtime-table-scroll { overflow-x: auto; }
+.overtime-monitoring-table { width: 100%; min-width: 1260px; border-collapse: collapse; font-size: .8rem; }
+.overtime-monitoring-table th { padding: 0 10px 11px; color: var(--muted-foreground); font-size: .67rem; letter-spacing: .05em; text-align: left; text-transform: uppercase; white-space: nowrap; }
+.overtime-monitoring-table td { padding: 13px 10px; border-top: 1px solid var(--border); vertical-align: middle; }
+.overtime-monitoring-table td:first-child, .overtime-monitoring-table th:first-child { padding-left: 0; }
+.overtime-wrap { display: grid; gap: 3px; overflow-wrap: anywhere; }
+.overtime-wrap small { color: var(--muted-foreground); font-size: .72rem; }
+.overtime-monitoring-detail-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; padding: 4px 2px 2px; }
+.overtime-monitoring-detail-heading h2 { margin-top: 5px; font-size: 1.3rem; }
+.overtime-monitoring-detail-heading p:last-child { margin-top: 4px; color: var(--muted-foreground); font-size: .82rem; }
+.overtime-monitoring-kicker { color: var(--primary); font-size: .75rem; font-weight: 750; letter-spacing: .05em; text-transform: uppercase; }
+.overtime-detail-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.overtime-detail-layout .card-content, .overtime-monitoring-page > .card .card-content { padding: 22px; }
+.overtime-detail-layout h3, .overtime-monitoring-page > .card h3 { margin-bottom: 17px; font-size: .98rem; }
+.overtime-monitoring-detail-list { display: grid; gap: 13px; }
+.overtime-monitoring-detail { display: grid; grid-template-columns: minmax(125px, .7fr) minmax(0, 1.3fr); gap: 14px; align-items: baseline; }
+.overtime-monitoring-detail dt { color: var(--muted-foreground); font-size: .76rem; }
+.overtime-monitoring-detail dd { color: var(--foreground); font-size: .83rem; font-weight: 600; overflow-wrap: anywhere; }
+.overtime-muted { color: var(--muted-foreground); font-size: .83rem; }
+.overtime-related-link { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
+.overtime-approval-timeline { display: grid; gap: 2px; }
+.overtime-approval-timeline-item { display: flex; gap: 11px; padding: 13px 0; border-top: 1px solid var(--border); }
+.overtime-timeline-icon { display: grid; place-items: center; width: 30px; height: 30px; flex: 0 0 auto; border-radius: 50%; background: #eef2ff; color: var(--primary); }
+.overtime-approval-timeline-item > div { display: grid; gap: 4px; min-width: 0; }
+.overtime-approval-timeline-item span, .overtime-approval-timeline-item p { color: var(--muted-foreground); font-size: .78rem; }
+.overtime-approval-timeline-item p { margin: 0; overflow-wrap: anywhere; }
+@media (max-width: 900px) { .overtime-monitor-summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .overtime-monitoring-toolbar > .overtime-search { width: 100%; flex-basis: 100%; } .overtime-monitoring-field { flex-basis: calc(33.333% - 8px); } }
+@media (max-width: 720px) { .overtime-monitor-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .overtime-monitoring-toolbar { align-items: stretch; } .overtime-monitoring-toolbar > .overtime-search, .overtime-monitoring-field { width: 100%; min-width: 0; flex-basis: 100%; } .overtime-monitoring-toolbar > .button { width: 100%; justify-content: center; } .overtime-detail-layout { grid-template-columns: 1fr; } .overtime-monitoring-detail-heading { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 420px) { .overtime-monitor-summary-grid { grid-template-columns: 1fr; } .overtime-monitoring-surface .card-content, .overtime-detail-layout .card-content, .overtime-monitoring-page > .card .card-content { padding: 16px; } .overtime-monitoring-detail { grid-template-columns: 1fr; gap: 3px; } }
 .mobile-menu-button, .mobile-sidebar, .mobile-drawer-backdrop { display: none; }
 .sidebar-toggle { flex: 0 0 auto; margin-right: 12px; color: var(--muted-foreground); }
 .page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
