@@ -77,4 +77,5 @@ describe('Overtime request contracts', () => {
     expect(validDateRange({ fromDate: '2026-08-31', toDate: '2026-08-01', page: 1, pageSize: 20 })).toBe('From date cannot be later than To date.')
     expect(validDateRange({ fromDate: '2026-08-01', toDate: '2026-08-31', page: 1, pageSize: 20 })).toBeNull()
   })
+
 })

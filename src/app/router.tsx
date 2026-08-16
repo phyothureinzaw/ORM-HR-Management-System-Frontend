@@ -54,6 +54,8 @@ import { OvertimeApprovalQueuePage } from '../features/overtime/pages/OvertimeAp
 import { OvertimeApprovalDetailsPage } from '../features/overtime/pages/OvertimeApprovalDetailsPage'
 import { CompanyOvertimePage } from '../features/overtime/pages/CompanyOvertimePage'
 import { CompanyOvertimeDetailsPage } from '../features/overtime/pages/CompanyOvertimeDetailsPage'
+import { NotificationCenterPage } from '../features/notifications/pages/NotificationCenterPage'
+import { NotificationPreferencesPage } from '../features/notifications/pages/NotificationPreferencesPage'
 
 export function AppRouter() {
   return (
@@ -120,7 +122,9 @@ export function AppRouter() {
          <Route path="/attendance/assignments/:assignmentId/edit" element={<AssignmentFormPage />} />
         <Route path="/petty-cash" element={<FeaturePlaceholderPage title="Petty Cash" />} />
         <Route path="/reports" element={<FeaturePlaceholderPage title="Reports" />} />
-         <Route path="/settings" element={<FeaturePlaceholderPage title="Settings" />} />
+          <Route path="/settings" element={<FeaturePlaceholderPage title="Settings" />} />
+          <Route path="/notifications" element={<NotificationCenterPage />} />
+          <Route path="/settings/notifications" element={<NotificationPreferencesPage />} />
          <Route path="/settings/leave" element={<LeaveSettingsLayout />}>
            <Route index element={<Navigate to="types" replace />} />
            <Route path="types" element={<LeaveTypesPage />} />
